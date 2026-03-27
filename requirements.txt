@@ -1,4 +1,4 @@
 flask
 flask-cors
-tree-sitter==0.21.3
-tree-sitter-javascript
+tree-sitter>=0.22.0
+tree-sitter-javascript>=0.22.0
