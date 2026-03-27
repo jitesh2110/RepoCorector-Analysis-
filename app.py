@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Setup Tree-sitter
-JS_LANGUAGE = Language(tsjavascript.language())
+JS_LANGUAGE = Language(tsjavascript.language(), "javascript")
 parser = Parser(JS_LANGUAGE)
 
 
