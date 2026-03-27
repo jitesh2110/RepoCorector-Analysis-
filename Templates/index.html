@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repo Analyzer - Raw JSON</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; background-color: #f4f4f9; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        #json-output {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 200px;
+            white-space: pre-wrap; /* Wraps long lines */
+        }
+        button {
+            background-color: #61dafb;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #4fa8c7; }
+        input[type="file"] { margin-bottom: 10px; }
+        .status { margin-bottom: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Upload Repository (.zip)</h2>
+    <input type="file" id="fileInput" accept=".zip">
+    <br>
+    <button onclick="uploadFile()">Analyze & View JSON</button>
+
+    <hr>
+
+    <div class="status" id="status"></div>
+    <h3>Analysis Result (Raw JSON)</h3>
+    <pre id="json-output">// JSON output will appear here after upload...</pre>
+</div>
+
+<script>
+    async function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const output = document.getElementById('json-output');
+        const status = document.getElementById('status');
+
+        if (!fileInput.files[0]) {
+            alert("Please select a .zip file first!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        status.innerText = "Analyzing... Please wait.";
+        output.innerText = "// Processing...";
+
+        try {
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            // This is the magic line: it strings the JSON with 4-space indentation
+            output.innerText = JSON.stringify(data, null, 4);
+            status.innerText = "Analysis Complete!";
+            status.style.color = "green";
+        } catch (error) {
+            output.innerText = "Error: " + error.message;
+            status.innerText = "Failed to process.";
+            status.style.color = "red";
+        }
+    }
+</script>
+
+</body>
+</html>
