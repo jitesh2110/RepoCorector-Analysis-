@@ -5,14 +5,14 @@ import tempfile
 import hashlib
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from tree_sitter import Language, Parser
 import tree_sitter_javascript as tsjavascript
+from tree_sitter import Language, Parser
 
 app = Flask(__name__)
 CORS(app)
 
 # Setup Tree-sitter
-JS_LANGUAGE = Language(tsjavascript.language(), "javascript")
+JS_LANGUAGE = Language(tsjavascript.language())
 parser = Parser(JS_LANGUAGE)
 
 
